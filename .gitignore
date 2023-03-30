@@ -1,0 +1,6 @@
+.idea/
+.git/
+*.exe
+vendor/
+build/
+main
