@@ -12,11 +12,16 @@ import (
 	"math/big"
 )
 
-// 招商使用sm4 加密 解密工具
+// 招商银行 签名，加密 解密工具
 type SMTool struct {
 }
 
-//  签名
+/*
+签名
+用户id
+用户私钥
+请求数据
+*/
 func (s *SMTool) SignString(uid, prikey, data string) string {
 	if len(uid) != 16 {
 		return ""
@@ -52,7 +57,14 @@ func (s *SMTool) SignString(uid, prikey, data string) string {
 	return signature
 }
 
-//验签
+/*
+验签
+用户id
+银行公钥
+请求数据
+签名数据
+*/
+
 func (s *SMTool) VerifyString(uid, pubKey, data, sign string) bool {
 
 	if len(uid) != 16 {
@@ -79,7 +91,12 @@ func (s *SMTool) VerifyString(uid, pubKey, data, sign string) bool {
 
 }
 
-// 加密
+/*
+加密
+用户id
+对称密钥（SM4密钥）
+签名后的数据
+*/
 func (s *SMTool) EncryptByString(uid, uKey string, data []byte) (string, error) {
 
 	block, err := sm4.NewCipher([]byte(uKey))
@@ -99,7 +116,12 @@ func (s *SMTool) EncryptByString(uid, uKey string, data []byte) (string, error) 
 
 }
 
-// 解密
+/*
+解密
+用户id
+对称密钥（SM4密钥）
+响应字符串
+*/
 func (s *SMTool) DecryptByString(uid, uKey, data string) ([]byte, error) {
 
 	data64, _ := base64.StdEncoding.DecodeString(data)
@@ -141,4 +163,3 @@ func unpaddingLastGroup(plainText []byte) []byte {
 	number := int(lastChar)
 	return plainText[:length-number]
 }
-
